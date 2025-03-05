@@ -1,5 +1,6 @@
 const express = require('express')
 const sequelize = require('~/config/mysqldb')
+const { Op,Sequelize } = require('sequelize')
 const Users = require('~/models/users')
 const { postUser } = require('~/services/users')
 const Book = require('~/models/books')
@@ -7,18 +8,8 @@ const Category = require('~/models/category')
 const cors = require('cors')
 const app = express()
 app.use(express.json())
-
-// Cấu hình CORS để cho phép tất cả domain truy cập API
 app.use(cors())
 
-// Nếu muốn giới hạn chỉ cho phép React frontend truy cập:
-// app.use(
-//   cors({
-//     origin: 'http://localhost:5173', // Hoặc domain frontend của cưng
-//     methods: ['GET', 'POST', 'PUT', 'ELETE'], // Các phương thức cho phép
-//     credentials: true // Cho phép gửi cookie nếu cần
-//   })
-// )
 app.get('/test-db', async (req, res) => {
   try {
     await sequelize.authenticate()
@@ -39,31 +30,53 @@ app.get('/users', async (req, res) => {
   }
 })
 app.use('/users', postUser)
+
 app.get('/books', async (req, res) => {
   try {
+    const { search } = req.query;
+    let whereCondition = {}; // Mặc định lấy tất cả
+
+    if (search) {
+      const normalizedSearch = `%${search.trim().toLowerCase()}%`;
+
+      whereCondition = {
+        [Op.or]: [
+          { title: { [Op.like]: normalizedSearch } },
+          Sequelize.literal(`LOWER(category.name) LIKE '${normalizedSearch}'`),
+        ],
+      };
+    }
+
     const books = await Book.findAll({
-      attributes: { exclude: ['category_id'] }, // Ẩn category_id
-      include: {
-        model: Category,
-        as: 'category',
-        attributes: ['name'] // Chỉ lấy name từ Category
-      }
-      // raw: true, // Trả về object thuần
-      // nest: true, // Gộp dữ liệu từ include vào object chính
-      // limit: 10
-    })
-    const formattedBooks = books.map(book => {
-      const { category, ...rest } = book.get({ plain: true })
+      where: whereCondition,
+      attributes: { exclude: ['category_id'] },
+      include: [
+        {
+          model: Category,
+          as: 'category',
+          attributes: ['name'],
+        },
+      ],
+    });
+
+    const formattedBooks = books.map((book) => {
+      const { category, ...rest } = book.get({ plain: true });
       return {
         ...rest,
-        category_name: category.name // Chỉ lấy `category_name`
-      }
-    })
-    res.status(200).json(formattedBooks)
+        category_name: category ? category.name : null,
+      };
+    });
+
+    res.status(200).json(formattedBooks);
   } catch (error) {
-    res.status(500).json({ error: error.message })
+    console.error('Error fetching books:', error);
+    res.status(500).json({ error: error.message });
   }
-})
+});
+
+
+
+
 
 
 // eslint-disable-next-line no-console
