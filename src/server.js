@@ -1,6 +1,6 @@
 const express = require('express')
 const sequelize = require('~/config/mysqldb')
-const { Op,Sequelize } = require('sequelize')
+const { Op, Sequelize } = require('sequelize')
 const Users = require('~/models/users')
 const { postUser } = require('~/services/users')
 const Book = require('~/models/books')
@@ -60,10 +60,11 @@ app.get('/books', async (req, res) => {
     });
 
     const formattedBooks = books.map((book) => {
-      const { category, ...rest } = book.get({ plain: true });
+      const { book_id, category, ...rest } = book.get({ plain: true });
       return {
         ...rest,
-        category_name: category ? category.name : null,
+        id:book_id,
+        category: category ? category.name : null,
       };
     });
 
