@@ -74,10 +74,12 @@ const createBook = async (reqBody) => {
 
 const updateBook = async (reqBody) => {
   try {
-    const { book_id, author, category_name, description, image_url, price, publisher, status, stock, supplier, title } = reqBody
-    if (!book_id) {throw new ApiError(400, 'Book ID is required')}
+    let { book_id, author, category_name, description, image_url, price, publisher, status, stock, supplier, title } = reqBody
+    // if (!book_id) {throw new ApiError(400, 'Book ID is required')}
     const book = await Book.findByPk(book_id)
-    if (!book) {throw new ApiError(404, 'Book not found')}
+    price = price ? parseFloat(price) : 0// Ép price thành số thực
+    stock = stock ? parseInt(stock, 10) : 0// Ép stock thành số nguyên
+    // if (!book) {throw new ApiError(404, 'Book not found')}
     let category_id = null
     if (category_name) {
       const category = await Category.findOne({ where: { name: category_name } })
