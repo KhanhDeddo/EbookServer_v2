@@ -6,4 +6,4 @@ Router.route('/')
   .post()
   .put()
 
-export const orderRouter = Router
+export const categoryRouter = Router
