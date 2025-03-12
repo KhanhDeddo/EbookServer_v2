@@ -16,7 +16,6 @@ const getBook = async (reqQuery) => {
         ]
       }
     }
-
     const books = await Book.findAll({
       where: whereCondition,
       attributes: { exclude: ['category_id'] },
@@ -41,15 +40,15 @@ const getBook = async (reqQuery) => {
 const createBook = async (reqBody) => {
   try {
     let {
-      author, category_name, description, image_url,
-      price, publisher, status, stock, supplier, title
+      author, category_name, description,
+      image_url, price, publisher, status,
+      stock, supplier, title
     } = reqBody
 
-    // ✅ Ép kiểu dữ liệu
-    price = price ? parseFloat(price) : 0// Ép price thành số thực
-    stock = stock ? parseInt(stock, 10) : 0// Ép stock thành số nguyên
+    price = price ? parseFloat(price) : 0
+    stock = stock ? parseInt(stock, 10) : 0
+    status = status ? status: null
 
-    // ✅ Xử lý category_id
     let category_id = null
     if (category_name) {
       const category = await Category.findOne({ where: { name: category_name } })
@@ -59,7 +58,6 @@ const createBook = async (reqBody) => {
       category_id = category.category_id
     }
 
-    // ✅ Tạo sách mới
     const newBook = await Book.create({
       author, category_id, description, image_url,
       price, publisher, status, stock, supplier, title
@@ -74,12 +72,15 @@ const createBook = async (reqBody) => {
 
 const updateBook = async (reqBody) => {
   try {
-    let { book_id, author, category_name, description, image_url, price, publisher, status, stock, supplier, title } = reqBody
-    // if (!book_id) {throw new ApiError(400, 'Book ID is required')}
+    let { book_id, author, category_name,
+      description, image_url, price, publisher,
+      status, stock, supplier, title
+    } = reqBody
+
+    price = price ? parseFloat(price) : 0
+    stock = stock ? parseInt(stock, 10) : 0
+
     const book = await Book.findByPk(book_id)
-    price = price ? parseFloat(price) : 0// Ép price thành số thực
-    stock = stock ? parseInt(stock, 10) : 0// Ép stock thành số nguyên
-    // if (!book) {throw new ApiError(404, 'Book not found')}
     let category_id = null
     if (category_name) {
       const category = await Category.findOne({ where: { name: category_name } })
@@ -88,9 +89,11 @@ const updateBook = async (reqBody) => {
       }
       category_id = category.category_id
     }
-    // Cập nhật thông tin sách
-    await book.update({ title, category_id, author, description, image_url, price, publisher, status, stock, supplier })
-    // Lấy thông tin mới sau khi cập nhật
+    await book.update({
+      title, category_id, author,
+      description, image_url, price,
+      publisher, status, stock, supplier
+    })
     const updatedBook = await Book.findByPk(book_id, {
       attributes: { exclude: ['category_id'] },
       include: [
@@ -101,7 +104,6 @@ const updateBook = async (reqBody) => {
         }
       ]
     })
-
     return {
       ...updatedBook.get({ plain: true }),
       id: updatedBook.book_id,
@@ -111,7 +113,6 @@ const updateBook = async (reqBody) => {
     throw new ApiError(400, error.message)
   }
 }
-
 
 export const productService = {
   getBook,
