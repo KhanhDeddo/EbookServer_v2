@@ -47,7 +47,7 @@ const createBook = async (reqBody) => {
 
     price = price ? parseFloat(price) : 0
     stock = stock ? parseInt(stock, 10) : 0
-    status = status ? status: null
+    status = status && status.trim() ? status : 'Đang bán'
 
     let category_id = null
     if (category_name) {
