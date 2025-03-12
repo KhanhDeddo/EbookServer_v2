@@ -27,7 +27,7 @@ const Book = sequelize.define('Book', {
   },
   status: {
     type: DataTypes.STRING(50),
-    allowNull: false,
+    allowNull: true,
     defaultValue: 'Đang bán'
   },
   stock: {
