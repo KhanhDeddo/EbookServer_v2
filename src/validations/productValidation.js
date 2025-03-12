@@ -15,8 +15,13 @@ const createProduct = async (req, res, next) => {
     next(new ApiError(422, new Error(error).message))
   }
 }
-const updateProduct = (req, res) => {
-  return res.status(200).json({ book:'update success' })
+const updateProduct = (req, res, next) => {
+  try {
+    next()
+  }
+  catch (error) {
+    next(new ApiError(400, new Error(error).message))
+  }
 }
 export const productValidation = {
   createProduct,
