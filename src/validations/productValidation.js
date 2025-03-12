@@ -4,11 +4,11 @@ import ApiError from '~/utils/ApiError'
 const createProduct = async (req, res, next) => {
   const correctCondition = Joi.object({
     title: Joi.string().required().min(5).max(100).trim().strict(),
-    category: Joi.string().required().min(5).max(100).trim().strict(),
+    category_name: Joi.string().required().min(5).max(100).trim().strict(),
     description: Joi.string().min(0).max(200).trim().strict()
   })
   try {
-    await correctCondition.validateAsync(req.body, { abortEarly: false })
+    await correctCondition.validateAsync(req.body, { abortEarly: false, allowUnknown: true })
     next()
   }
   catch (error) {
