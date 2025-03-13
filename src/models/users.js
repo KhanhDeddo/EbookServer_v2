@@ -9,13 +9,18 @@ const User = sequelize.define('User',
       primaryKey: true
     },
     username: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(200),
       allowNull: false
     },
     email: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.STRING(200),
       allowNull: false,
       unique: true
+    },
+    image_url: {
+      type: DataTypes.STRING(500),
+      allowNull: true,
+      defaultValue:'https://i.pinimg.com/736x/5a/d5/85/5ad585a6df619c6c393c2b371fad7881.jpg'
     },
     phone: {
       type: DataTypes.STRING(20),

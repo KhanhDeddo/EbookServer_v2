@@ -1,14 +1,16 @@
 import express from 'express'
+import { userController } from '~/controllers/userController'
+
 const Router = express.Router()
 
+// Route cho danh sách người dùng
 Router.route('/')
-  .get((req, res) => {
-    return res.status(200).json({ Khanh:'Hello World' })
-  })
-  .post((req, res) => {
-    return res.status(201).json({ Khanh:'Hello World post' })
-  })
-  .put((req, res) => {
-    return res.status(200).json({ operator:'put' })
-  })
+  .get(userController.getUser)
+
+// Route cho user theo ID
+Router.route('/:id')
+  .get(userController.getUser)
+  .post(userController.getUser)
+  .put(userController.updateUser)
+
 export const userRouter = Router

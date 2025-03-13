@@ -9,7 +9,7 @@ const Book = sequelize.define('Book', {
     primaryKey: true
   },
   title: {
-    type: DataTypes.STRING(50),
+    type: DataTypes.STRING(200),
     allowNull: false
   },
   category_id: {
@@ -26,7 +26,7 @@ const Book = sequelize.define('Book', {
     allowNull: false
   },
   status: {
-    type: DataTypes.STRING(50),
+    type: DataTypes.STRING(100),
     allowNull: true,
     defaultValue: 'Đang bán'
   },
@@ -35,23 +35,23 @@ const Book = sequelize.define('Book', {
     allowNull: false
   },
   image_url: {
-    type: DataTypes.STRING(200),
+    type: DataTypes.STRING(500),
     allowNull: false
   },
   author: {
-    type: DataTypes.STRING(50),
+    type: DataTypes.STRING(100),
     allowNull: false
   },
   supplier: {
-    type: DataTypes.STRING(50),
+    type: DataTypes.STRING(100),
     allowNull: false
   },
   publisher: {
-    type: DataTypes.STRING(50),
+    type: DataTypes.STRING(100),
     allowNull: false
   },
   description: {
-    type: DataTypes.STRING(200),
+    type: DataTypes.STRING(500),
     allowNull: true
   },
   create_at: {
