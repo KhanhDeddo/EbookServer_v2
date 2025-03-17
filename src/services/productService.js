@@ -3,10 +3,19 @@ import Book from '~/models/books'
 import Category from '~/models/category'
 import ApiError from '~/utils/ApiError'
 
-const getBook = async (reqQuery) => {
+const getBook = async (req) => {
   try {
-    const { search } = reqQuery
+    const { search } = req.query
+    const { id } = req.params
     let whereCondition = {}
+    if (id) {
+      const book = await Book.findOne({
+        where: { book_id: id },
+        attributes: { exclude: ['category_id'] },
+        include: [{ model: Category, as: 'category', attributes: ['name'] }]
+      })
+      return book ? { ...book.get({ plain: true }), id: book.book_id, category: book.category?.name || null } : null
+    }
     if (search) {
       const normalizedSearch = `%${search.trim().toLowerCase()}%`
       whereCondition = {

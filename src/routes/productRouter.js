@@ -8,4 +8,6 @@ Router.route('/')
   .post(productValidation.createProduct, productController.createProduct)
   .put(productValidation.updateProduct, productController.updateProduct)
 
+Router.route('/:id')
+  .get(productController.getProduct)
 export const productRouter = Router

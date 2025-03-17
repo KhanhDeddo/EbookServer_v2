@@ -2,7 +2,7 @@ import { productService } from '~/services/productService'
 
 const getProduct = async (req, res, next) => {
   try {
-    const getBook = await productService.getBook(req.query)
+    const getBook = await productService.getBook(req)
     return res.status(200).json(getBook)
   } catch (error) {
     next(error)
