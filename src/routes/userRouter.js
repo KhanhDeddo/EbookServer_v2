@@ -6,6 +6,7 @@ const Router = express.Router()
 // Route cho danh sách người dùng
 Router.route('/')
   .get(userController.getUser)
+  .post(userController.createUser)
 
 // Route cho user theo ID
 Router.route('/:id')

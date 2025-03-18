@@ -13,9 +13,9 @@ const User = sequelize.define('User',
       allowNull: false
     },
     email: {
-      type: DataTypes.STRING(200),
+      type: DataTypes.STRING(100),
       allowNull: false,
-      unique: true
+      unique: { name: 'unique_email', msg: 'Email đã tồn tại' }
     },
     image_url: {
       type: DataTypes.STRING(500),
@@ -24,21 +24,25 @@ const User = sequelize.define('User',
     },
     phone: {
       type: DataTypes.STRING(20),
-      allowNull: false,
-      unique: true
+      allowNull: true,
+      unique: { name: 'unique_phone', msg: 'Số điện thoại đã tồn tại' }
     },
     gender: {
-      type: DataTypes.ENUM('male', 'female')
+      type: DataTypes.ENUM('male', 'female'),
+      allowNull: true
     },
     role: {
       type: DataTypes.ENUM('customer', 'admin'),
+      allowNull: true,
       defaultValue: 'customer'
     },
     birthday: {
-      type: DataTypes.DATE
+      type: DataTypes.DATE,
+      allowNull: true
     },
     address: {
-      type: DataTypes.STRING(100)
+      type: DataTypes.STRING(100),
+      allowNull: true
     },
     password_hash: {
       type: DataTypes.STRING(255)
@@ -57,5 +61,5 @@ const User = sequelize.define('User',
     timestamps: false
   }
 )
-sequelize.sync({ alter: false, force: false })
+sequelize.sync({ alter: true })
 module.exports = User

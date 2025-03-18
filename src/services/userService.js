@@ -23,31 +23,22 @@ const getUser = async (req) => {
 }
 const createUser = async (reqBody) => {
   try {
-    const { username, email, phone, image_url, gender, role, birthday, address, password } = reqBody
-    // Kiểm tra xem email hoặc phone đã tồn tại chưa
-    // const existingUser = await User.findOne({ where: { email } }) || await User.findOne({ where: { phone } })
-    // if (existingUser) {
-    //   return status(400).json({ message: 'Email hoặc số điện thoại đã được sử dụng' })
-    // }
-    // Hash password
-    const saltRounds = 10
-    const password_hash = await bcrypt.hash(password, saltRounds)
+    const { username, email, password } = reqBody;
+    const saltRounds = 10;
+    const password_hash = await bcrypt.hash(password, saltRounds);
+
     const newUser = await User.create({
       username,
-      image_url,
       email,
-      phone,
-      gender,
-      role,
-      birthday,
-      address,
       password_hash
-    })
-    return newUser
+    });
+
+    return newUser;
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(error)
-    throw new ApiError(400, error.message)
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      throw new ApiError(409, 'Email đã tồn tại. Vui lòng sử dụng email khác.');
+    }
+    throw new ApiError(400, error.message);
   }
 }
 const updateUser = async (reqBody) => {
