@@ -20,7 +20,7 @@ const User = sequelize.define('User',
     image_url: {
       type: DataTypes.STRING(500),
       allowNull: true,
-      defaultValue:'https://i.pinimg.com/736x/5a/d5/85/5ad585a6df619c6c393c2b371fad7881.jpg'
+      defaultValue:'https://i.pinimg.com/736x/15/34/1e/15341e1e5890dc475bd0d3708c89430e.jpg'
     },
     phone: {
       type: DataTypes.STRING(20),
@@ -61,5 +61,4 @@ const User = sequelize.define('User',
     timestamps: false
   }
 )
-sequelize.sync({ alter: true })
 module.exports = User

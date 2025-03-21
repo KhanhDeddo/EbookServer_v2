@@ -1,6 +1,5 @@
 const { DataTypes } = require('sequelize')
 const sequelize = require('~/config/mysqldb')
-const Category = require('./category')
 
 const Book = sequelize.define('Book', {
   book_id: {
@@ -14,12 +13,7 @@ const Book = sequelize.define('Book', {
   },
   category_id: {
     type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: Category,
-      key: 'category_id'
-    },
-    onDelete: 'CASCADE'
+    allowNull: false
   },
   price: {
     type: DataTypes.INTEGER,
@@ -66,6 +60,4 @@ const Book = sequelize.define('Book', {
   tableName:'book',
   timestamps: false
 })
-Book.belongsTo(Category, { foreignKey: 'category_id', as: 'category' })
-Category.hasMany(Book, { foreignKey: 'category_id', as: 'books' })
 module.exports = Book

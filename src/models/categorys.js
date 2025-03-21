@@ -11,7 +11,7 @@ const Category = sequelize.define('Category',
     name: {
       type: DataTypes.STRING(100),
       allowNull: false,
-      unique: true
+      unique: { name:'unique_name', msg:'Tên danh mục này đã tồn tại, vui lòng nhập tên khác' }
     }
   },
   {

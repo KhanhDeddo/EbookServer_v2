@@ -1,6 +1,5 @@
 import { Op } from 'sequelize'
-import Book from '~/models/books'
-import Category from '~/models/category'
+import { Category, Book } from '~/models/relations'
 import ApiError from '~/utils/ApiError'
 
 const getBook = async (req) => {

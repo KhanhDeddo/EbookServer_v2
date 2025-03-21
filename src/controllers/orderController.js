@@ -11,7 +11,7 @@ const getOrder = async (req, res, next) => {
 
 const createOrder = async (req, res, next) => {
   try {
-    const createOrder = await orderService.updateOrder(req.body)
+    const createOrder = await orderService.createOrder(req.body)
     return res.status(201).json(createOrder)
   } catch (error) {
     next(error)

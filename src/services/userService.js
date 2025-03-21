@@ -1,7 +1,7 @@
 import ApiError from '~/utils/ApiError'
-
 const bcrypt = require('bcrypt')
-const User = require('~/models/users')
+import { User } from '~/models/relations'
+
 
 const getUser = async (req) => {
   try {
@@ -23,22 +23,22 @@ const getUser = async (req) => {
 }
 const createUser = async (reqBody) => {
   try {
-    const { username, email, password } = reqBody;
-    const saltRounds = 10;
-    const password_hash = await bcrypt.hash(password, saltRounds);
+    const { username, email, password } = reqBody
+    const saltRounds = 10
+    const password_hash = await bcrypt.hash(password, saltRounds)
 
     const newUser = await User.create({
       username,
       email,
       password_hash
-    });
+    })
 
-    return newUser;
+    return newUser
   } catch (error) {
     if (error.name === 'SequelizeUniqueConstraintError') {
-      throw new ApiError(409, 'Email đã tồn tại. Vui lòng sử dụng email khác.');
+      throw new ApiError(409, 'Email đã tồn tại. Vui lòng sử dụng email khác.')
     }
-    throw new ApiError(400, error.message);
+    throw new ApiError(400, error.message)
   }
 }
 const updateUser = async (reqBody) => {

@@ -1,34 +1,33 @@
 const { DataTypes } = require('sequelize')
 const sequelize = require('~/config/mysqldb')
-
-const Order = sequelize.define('Order',
+const OrderItem = sequelize.define('OrderItem',
   {
-    order_id: {
+    order_item_id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true
     },
-    delivery_infor_id: {
+    order_id: {
       type: DataTypes.INTEGER,
       allowNull: true
     },
-    customer_infor_id: {
+    book_id: {
       type: DataTypes.INTEGER,
       allowNull: true
     },
-    status: {
-      type: DataTypes.STRING(100),
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    unit_price: {
+      type: DataTypes.FLOAT,
+      allowNull: true
+    },
+    discount_price: {
+      type: DataTypes.FLOAT,
       allowNull: true
     },
     total_price: {
-      type: DataTypes.FLOAT,
-      allowNull: true
-    },
-    discount_applied: {
-      type: DataTypes.FLOAT,
-      allowNull: true
-    },
-    final_price: {
       type: DataTypes.FLOAT,
       allowNull: true
     },
@@ -42,8 +41,8 @@ const Order = sequelize.define('Order',
     }
   },
   {
-    tableName:'orders',
+    tableName:'order_item',
     timestamps: false
   }
 )
-module.exports = Order
+module.exports = OrderItem
