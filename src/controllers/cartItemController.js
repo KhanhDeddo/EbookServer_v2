@@ -27,8 +27,18 @@ const updateCartItem = async (req, res, next) => {
   }
 }
 
+const deleteCartItem = async (req, res, next) => {
+  try {
+    const deleteCartItem = await cartItemService.deleteCartItem(req.body)
+    return res.status(200).json(deleteCartItem)
+  } catch (error) {
+    next(error)
+  }
+}
+
 export const cartItemController = {
   getCartItem,
   createCartItem,
-  updateCartItem
+  updateCartItem,
+  deleteCartItem
 }
