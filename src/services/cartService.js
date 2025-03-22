@@ -1,4 +1,4 @@
-import { Cart, CartItem } from '~/models/relations'
+import { Book, Cart, CartItem } from '~/models/relations'
 import ApiError from '~/utils/ApiError'
 const getCart = async (req) => {
   try {
@@ -11,7 +11,11 @@ const getCart = async (req) => {
         {
           model: CartItem,
           as: 'cartItems',
-          attributes: ['cart_id', 'book_id', 'quantity', 'price_at_time']
+          // attributes: ['cart_item_id', 'cart_id', 'book_id', 'quantity', 'price_at_time'],
+          include: [{
+            model:Book,
+            attributes:['title', 'image_url', 'price']
+          }]
         }
       ]
     })
