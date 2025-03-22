@@ -21,14 +21,23 @@ const createCartItem = async (reqBody) => {
   }
 }
 const updateCartItem = async (reqBody) => {
-  const { cart_id, book_id, quantity, price_at_time } = reqBody
+  const { cart_item_id, quantity, price_at_time } = reqBody
   try {
-    const cartItem = await CartItem.update({ cart_id, book_id, quantity, price_at_time })
-    return cartItem
+    const updated = await CartItem.update(
+      { quantity, price_at_time },
+      { where: { cart_item_id } }
+    );
+
+    if (updated[0] > 0) {
+      return { success: true, message: 'Cập nhật thành công' }
+    } else {
+      return { success: false, message: 'Không tìm thấy cart_item_id' }
+    }
   } catch (error) {
     throw new ApiError(400, error.message)
   }
 }
+
 const deleteCartItem = async (reqBody) => {
   const { cart_item_id } = reqBody
   try {
