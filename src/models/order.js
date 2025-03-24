@@ -8,6 +8,10 @@ const Order = sequelize.define('Order',
       autoIncrement: true,
       primaryKey: true
     },
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
     delivery_infor_id: {
       type: DataTypes.INTEGER,
       allowNull: true
@@ -30,6 +34,18 @@ const Order = sequelize.define('Order',
     },
     final_price: {
       type: DataTypes.FLOAT,
+      allowNull: true
+    },
+    name: {
+      type: DataTypes.STRING(100),
+      allowNull: true
+    },
+    phone: {
+      type: DataTypes.STRING(100),
+      allowNull: true
+    },
+    address: {
+      type: DataTypes.STRING(100),
       allowNull: true
     },
     create_at: {

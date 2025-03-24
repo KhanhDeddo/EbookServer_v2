@@ -27,8 +27,18 @@ const updateOrder = async (req, res, next) => {
   }
 }
 
+const deleteOrder = async (req, res, next) => {
+  try {
+    const deleteOrder = await orderService.deleteOrder(req.body)
+    return res.status(200).json(deleteOrder)
+  } catch (error) {
+    next(error)
+  }
+}
+
 export const orderController = {
   getOrder,
   createOrder,
-  updateOrder
+  updateOrder,
+  deleteOrder
 }

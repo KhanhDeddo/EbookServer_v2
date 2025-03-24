@@ -7,6 +7,7 @@ const Order = require('./order')
 const OrderItem = require('./orderItems')
 const sequelize = require('~/config/mysqldb')
 const CustomerInfor = require('./customerInfor')
+const DeliveryInfo = require('./deliveryInfor')
 
 
 User.hasOne(Cart, { foreignKey: 'user_id', onDelete: 'CASCADE' })
@@ -30,8 +31,11 @@ OrderItem.belongsTo(Order, { foreignKey: 'order_id' })
 Book.hasMany(OrderItem, { foreignKey: 'book_id', onDelete: 'CASCADE' })
 OrderItem.belongsTo(Book, { foreignKey: 'book_id' })
 
-CustomerInfor.hasMany(Order, { foreignKey: 'customer_infor_id', onDelete: 'CASCADE' })
-Order.belongsTo(CustomerInfor, { foreignKey: 'customer_infor_id' })
+User.hasMany(Order, { foreignKey: 'user_id', onDelete: 'CASCADE' })
+Order.belongsTo(User, { foreignKey: 'user_id' })
+
+DeliveryInfo.hasMany(Order, { foreignKey: 'delivery_infor_id' } )
+Order.belongsTo(DeliveryInfo, { foreignKey: 'delivery_infor_id' } )
 
 
 sequelize.sync({ alter: true })

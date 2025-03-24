@@ -14,7 +14,7 @@ const getCart = async (req) => {
           // attributes: ['cart_item_id', 'cart_id', 'book_id', 'quantity', 'price_at_time'],
           include: [{
             model:Book,
-            attributes:['title', 'image_url', 'price']
+            attributes:['title', 'image_url', 'price', 'stock']
           }]
         }
       ]

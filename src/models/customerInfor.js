@@ -40,9 +40,8 @@ const CustomerInfor = sequelize.define('CustomerInfor', {
     defaultValue: DataTypes.NOW
   }
 }, {
-  timestamps: true,
-  createdAt: 'create_at',
-  updatedAt: 'update_at'
+  tableName:'customer_infor',
+  timestamps: true
 })
 
 module.exports = CustomerInfor

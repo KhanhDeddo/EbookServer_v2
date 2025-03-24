@@ -26,7 +26,7 @@ const updateCartItem = async (reqBody) => {
     const updated = await CartItem.update(
       { quantity, price_at_time },
       { where: { cart_item_id } }
-    );
+    )
 
     if (updated[0] > 0) {
       return { success: true, message: 'Cập nhật thành công' }
@@ -47,7 +47,7 @@ const deleteCartItem = async (reqBody) => {
     }
     return {
       success: true,
-      message: 'Xóa cart_item thành công'
+      message: 'Xóa sản phẩm thành công'
     }
   } catch (error) {
     throw new ApiError(400, error.message)
