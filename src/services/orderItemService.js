@@ -7,9 +7,9 @@ const getOrderItem = async (req) => {
 }
 const createOrderItem = async (reqBody) => {
   try {
-    const { order_id, book_id, quantity, unit_price, discount_price, total_price } = reqBody
+    const { order_id, book_id, quantity, unit_price, discount_price, total_price, cart_item_id } = reqBody
     const newOrderItem = await OrderItem.create({
-      order_id, book_id, quantity, unit_price, discount_price, total_price
+      order_id, book_id, quantity, unit_price, discount_price, total_price, cart_item_id
     })
     return newOrderItem
   } catch (e) {
@@ -21,9 +21,26 @@ const updateOrderItem = async (req) => {
 
 }
 
+const deleteOrderItem = async (reqBody) => {
+  const { cart_item_id } = reqBody
+  try {
+    const result = await OrderItem.destroy({ where: { cart_item_id } })
+    if (result === 0) {
+      throw new ApiError(404, 'Không tìm thấy cart_item để xóa')
+    }
+    return {
+      success: true,
+      message: 'Xóa sản phẩm thành công'
+    }
+  } catch (error) {
+    throw new ApiError(400, error.message)
+  }
+}
+
 export const orderItemService = {
   getOrderItem,
   createOrderItem,
-  updateOrderItem
+  updateOrderItem,
+  deleteOrderItem
 
 }

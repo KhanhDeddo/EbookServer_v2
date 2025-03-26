@@ -31,6 +31,10 @@ const OrderItem = sequelize.define('OrderItem',
       type: DataTypes.FLOAT,
       allowNull: true
     },
+    cart_item_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
     create_at: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW
