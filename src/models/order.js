@@ -48,6 +48,15 @@ const Order = sequelize.define('Order',
       type: DataTypes.STRING(100),
       allowNull: true
     },
+    payment_method: {
+      type: DataTypes.STRING(100),
+      allowNull: true
+    },
+    payment_status: {
+      type: DataTypes.STRING(100),
+      allowNull: true,
+      defaultValue:'Chưa thanh toán'
+    },
     create_at: {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW

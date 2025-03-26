@@ -4,7 +4,7 @@ import ApiError from '~/utils/ApiError'
 const getCartItem = async (req) => {
   try {
     const { cart_id } = req.query
-    const cartItem = await CartItem.findAll({ where:{ cart_id } })
+    const cartItem = await CartItem.findAll({ where: { cart_id } })
     return cartItem
   } catch (error) {
     throw new ApiError(400, new Error(error).message)
@@ -14,8 +14,22 @@ const getCartItem = async (req) => {
 const createCartItem = async (reqBody) => {
   const { cart_id, book_id, quantity, price_at_time } = reqBody
   try {
-    const newcartItem = await CartItem.create({ cart_id, book_id, quantity, price_at_time })
-    return newcartItem
+    const checkBook = await CartItem.findOne({ where: { book_id } })
+    let newCartItem
+    if (checkBook) {
+      newCartItem = await CartItem.update(
+        {
+          cart_id,
+          book_id,
+          quantity: checkBook.quantity + quantity,
+          price_at_time: checkBook.price_at_time + price_at_time
+        },
+        { where: { cart_item_id: checkBook.cart_item_id } }
+      )
+    } else {
+      newCartItem = await CartItem.create({ cart_id, book_id, quantity, price_at_time })
+    }
+    return newCartItem
   } catch (error) {
     throw new ApiError(400, error.message)
   }

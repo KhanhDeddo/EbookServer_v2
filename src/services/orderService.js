@@ -41,18 +41,30 @@ const getOrder = async (req) => {
 }
 
 const createOrder = async (reqBody) => {
-  const { user_id, name, phone, address, delivery_infor_id, customer_infor_id, status, total_price, discount_applied, final_price } = reqBody
+  const { user_id, name, phone, address, delivery_infor_id, customer_infor_id, status, total_price, discount_applied, final_price, payment_method, payment_status } = reqBody
   const newOrder = await Order.create({
     user_id, name, phone, address,
     delivery_infor_id,
     customer_infor_id,
     status, total_price,
-    discount_applied, final_price
+    discount_applied, final_price,
+    payment_method, payment_status
   })
   return newOrder
 }
-const updateOrder = async (req) => {
-  return { massage: 'đã vô orderService' }
+const updateOrder = async (reqBody) => {
+  const { order_id, name, phone, address, delivery_infor_id, status, total_price, discount_applied, final_price, payment_method, payment_status } = reqBody
+  const newOrder = await Order.update(
+    {
+      name, phone, address,
+      delivery_infor_id,
+      status, total_price,
+      discount_applied, final_price,
+      payment_method, payment_status
+    },
+    { where: { order_id } }
+  )
+  return newOrder
 }
 const deleteOrder = async (reqBody) => {
   const { order_id } = reqBody
