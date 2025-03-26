@@ -40,9 +40,11 @@ const getOrder = async (req) => {
   return orders
 }
 
+const moment = require('moment')
 const createOrder = async (reqBody) => {
+  const transID = `${moment().format('YYMMDD')}_${Math.floor(Math.random() * 1000000)}`
   const { user_id, name, phone, address, delivery_infor_id, customer_infor_id, status, total_price, discount_applied, final_price, payment_method, payment_status } = reqBody
-  const newOrder = await Order.create({
+  const newOrder = await Order.create({ transID,
     user_id, name, phone, address,
     delivery_infor_id,
     customer_infor_id,
@@ -53,10 +55,10 @@ const createOrder = async (reqBody) => {
   return newOrder
 }
 const updateOrder = async (reqBody) => {
-  const { order_id, name, phone, address, delivery_infor_id, status, total_price, discount_applied, final_price, payment_method, payment_status } = reqBody
+  const { transID, order_id, name, phone, address, delivery_infor_id, status, total_price, discount_applied, final_price, payment_method, payment_status } = reqBody
   const newOrder = await Order.update(
     {
-      name, phone, address,
+      name, phone, address, transID,
       delivery_infor_id,
       status, total_price,
       discount_applied, final_price,

@@ -12,6 +12,7 @@ import { authRouter } from './authRouter'
 import { cartItemRouter } from './cartItemRouter'
 import { orderItemRouter } from './orderItemRouter'
 import { customerInforRouter } from './customerInforRouter'
+import ZaloPay from '~/utils/zalopay'
 
 const Router = express.Router()
 Router.use('/status-db', statusDBRouter)
@@ -28,5 +29,7 @@ Router.use('/emails', emailRouter)
 Router.use('/cart-items', cartItemRouter)
 Router.use('/order-items', orderItemRouter)
 Router.use('/customer-infors', customerInforRouter)
+Router.use('/', ZaloPay)
+
 
 export default Router

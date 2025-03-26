@@ -8,6 +8,10 @@ const Order = sequelize.define('Order',
       autoIncrement: true,
       primaryKey: true
     },
+    transID: {
+      type: DataTypes.STRING(30),
+      allowNull:true
+    },
     user_id: {
       type: DataTypes.INTEGER,
       allowNull: true
