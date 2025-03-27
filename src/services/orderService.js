@@ -1,4 +1,4 @@
-import { Book, Order, OrderItem } from '~/models/relations'
+import { Book, Order, OrderItem, User } from '~/models/relations'
 
 const getOrder = async (req) => {
   const { user_id, order_id } = req.query
@@ -17,6 +17,10 @@ const getOrder = async (req) => {
               attributes: ['title', 'image_url', 'price']
             }
           ]
+        },
+        {
+          model:User
+          // attributes:['username']
         }
       ]
     })
@@ -34,6 +38,10 @@ const getOrder = async (req) => {
             attributes: ['title', 'image_url']
           }
         ]
+      },
+      {
+        model:User
+        // attributes:['username']
       }
     ]
   })
