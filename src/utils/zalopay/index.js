@@ -1,9 +1,10 @@
+/* eslint-disable no-console */
 /* eslint-disable quotes */
 require('dotenv').config()
 const express = require('express')
 const axios = require('axios')
 const CryptoJS = require('crypto-js')
-import { Order } from '~/models/relations'
+import { Book, Order, OrderItem } from '~/models/relations'
 // const moment = require('moment')
 
 const Router = express.Router()
@@ -36,6 +37,7 @@ Router.post('/zalopay', async (req, res) => {
       amount: amount,
       description: `Thanh toán đơn hàng #${transID}`,
       bank_code: "",
+      // callback_url: `https://071e-2405-4802-1ca6-8e60-7c3d-bc4c-7aa3-7d52.ngrok-free.app/zalopay-callback`
       callback_url: `${process.env.SERVER_URL}/zalopay-callback`
     }
 
@@ -60,13 +62,37 @@ Router.post("/zalopay-callback", async (req, res) => {
     const parsedData = JSON.parse(req.body.data)
     const app_trans_id = parsedData.app_trans_id
     console.log("Extracted app_trans_id:", app_trans_id)
+
     if (!app_trans_id) {
       return res.status(400).json({ message: "Thiếu app_trans_id" })
     }
+    // Cập nhật trạng thái đơn hàng
     const dataToUpdate = {
       payment_status: "Đã thanh toán",
       status: "Đã xác nhận"
     }
+    const order = await Order.findOne({
+      where: { transID: app_trans_id },
+      include: [{ model: OrderItem }]
+    })
+    if (!order) {
+      return res.status(404).json({ message: "Không tìm thấy đơn hàng" })
+    }
+    console.log("Order found:", order)
+    const orderItems = order.OrderItems
+    console.log("Order items:", orderItems)
+    // Cập nhật số lượng sách đúng cách
+    for (const orderItem of orderItems) {
+      console.log("Book ID:", orderItem.book_id)
+      const book = await Book.findByPk(orderItem.book_id)
+      if (book) {
+        const newQuantity = book.stock - orderItem.quantity
+        console.log(`Updating book ${book.id} stock: ${book.stock} -> ${newQuantity}`)
+
+        await book.update({ stock: newQuantity })
+      }
+    }
+    // Cập nhật trạng thái đơn hàng
     const updatedOrder = await Order.update(dataToUpdate, {
       where: { transID: app_trans_id }
     })
