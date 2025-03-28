@@ -35,7 +35,7 @@ const getOrder = async (req) => {
         include: [
           {
             model: Book,
-            attributes: ['title', 'image_url']
+            attributes: ['title', 'image_url', 'price']
           }
         ]
       },
