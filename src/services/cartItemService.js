@@ -12,28 +12,35 @@ const getCartItem = async (req) => {
 }
 
 const createCartItem = async (reqBody) => {
-  const { cart_id, book_id, quantity, price_at_time } = reqBody
+  let { cart_id, book_id, quantity, price_at_time } = reqBody
+
+  // Chuyển đổi về số
+  cart_id = Number(cart_id)
+  book_id = Number(book_id)
+  quantity = Number(quantity)
+  price_at_time = Number(price_at_time)
+
   try {
-    const checkBook = await CartItem.findOne({ where: { book_id } })
+    const checkBook = await CartItem.findOne({ where: { cart_id, book_id } })
     let newCartItem
+
     if (checkBook) {
-      newCartItem = await CartItem.update(
-        {
-          cart_id,
-          book_id,
-          quantity: checkBook.quantity + quantity,
-          price_at_time: checkBook.price_at_time + price_at_time
-        },
+      await CartItem.update(
+        { quantity: checkBook.quantity + quantity },
         { where: { cart_item_id: checkBook.cart_item_id } }
       )
+
+      newCartItem = await CartItem.findOne({ where: { cart_item_id: checkBook.cart_item_id } }) // Lấy lại dữ liệu sau khi cập nhật
     } else {
       newCartItem = await CartItem.create({ cart_id, book_id, quantity, price_at_time })
     }
+
     return newCartItem
   } catch (error) {
     throw new ApiError(400, error.message)
   }
 }
+
 const updateCartItem = async (reqBody) => {
   const { cart_item_id, quantity, price_at_time } = reqBody
   try {
