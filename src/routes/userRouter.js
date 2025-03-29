@@ -7,6 +7,7 @@ const Router = express.Router()
 Router.route('/')
   .get(userController.getUser)
   .post(userController.createUser)
+  .put(userController.updateUser)
 
 // Route cho user theo ID
 Router.route('/:id')

@@ -10,6 +10,7 @@ const authUser = async (reqBody) => {
 
     const user = await User.findOne({ where: { email } })
     if (!user) throw new ApiError(404, 'Tài khoản không tồn tại')
+    if (user.status === 'banner') throw new ApiError(404, 'Tài khoản của bạn đã bị khóa')
 
     const isMatch = await bcrypt.compare(password, user.password_hash)
     if (!isMatch) throw new ApiError(401, 'Sai mật khẩu')

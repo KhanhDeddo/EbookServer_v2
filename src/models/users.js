@@ -12,6 +12,15 @@ const User = sequelize.define('User',
       type: DataTypes.STRING(200),
       allowNull: false
     },
+    fullname: {
+      type: DataTypes.STRING(200),
+      allowNull: true
+    },
+    status: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+      defaultValue:'active'
+    },
     email: {
       type: DataTypes.STRING(100),
       allowNull: false,
@@ -25,14 +34,14 @@ const User = sequelize.define('User',
     phone: {
       type: DataTypes.STRING(20),
       allowNull: true,
-      unique: { name: 'unique_phone', msg: 'Số điện thoại đã tồn tại' }
+      unique:false
     },
     gender: {
       type: DataTypes.ENUM('male', 'female'),
       allowNull: true
     },
     role: {
-      type: DataTypes.ENUM('customer', 'admin'),
+      type: DataTypes.ENUM('customer', 'admin', 'staff'),
       allowNull: true,
       defaultValue: 'customer'
     },

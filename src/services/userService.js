@@ -23,16 +23,17 @@ const getUser = async (req) => {
 }
 const createUser = async (reqBody) => {
   try {
-    const { username, email, password } = reqBody
+    const { username, email, password, role = 'customer', ...optionalFields } = reqBody
     const saltRounds = 10
     const password_hash = await bcrypt.hash(password, saltRounds)
 
     const newUser = await User.create({
       username,
       email,
-      password_hash
+      password_hash,
+      role,
+      ...optionalFields // Chỉ thêm nếu có trong reqBody
     })
-
     return newUser
   } catch (error) {
     if (error.name === 'SequelizeUniqueConstraintError') {
@@ -43,9 +44,9 @@ const createUser = async (reqBody) => {
 }
 const updateUser = async (reqBody) => {
   try {
-    const { user_id, username, email, phone, image_url, gender, role, birthday, address } = reqBody
+    const { user_id, username, email, phone, image_url, gender, role, birthday, status, fullname } = reqBody
     const user = await User.findByPk(user_id)
-    await user.update({ username, email, phone, image_url, gender, role, birthday, address })
+    await user.update({ username, email, phone, image_url, gender, role, birthday, status, fullname })
     return user
   } catch (error) {
     throw new Error(error.message)
